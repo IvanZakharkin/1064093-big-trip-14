@@ -23,30 +23,21 @@ const renderMenu = () => {
     'beforeend',
   );
 };
+
+const pointsContainer = document.querySelector('.trip-events__list');
+
 const renderPoints = () => {
   const countPoint = 3;
 
   for (let i = 0; i < countPoint; i += 1) {
-    render(
-      document.querySelector('.trip-events__list'),
-      getPointTemplate(),
-      'beforeend',
-    );
+    render(pointsContainer, getPointTemplate(), 'beforeend');
   }
 };
 const renderPointEdit = () => {
-  render(
-    document.querySelector('.trip-events__list'),
-    getPointEditTemplate(),
-    'afterbegin',
-  );
+  render(pointsContainer, getPointEditTemplate(), 'afterbegin');
 };
 const renderSorting = () => {
-  render(
-    document.querySelector('.trip-events__list'),
-    getSortingTemplate(),
-    'beforebegin',
-  );
+  render(pointsContainer, getSortingTemplate(), 'beforebegin');
 };
 const renderTripInfo = () => {
   render(
