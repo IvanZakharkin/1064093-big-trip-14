@@ -41,8 +41,8 @@ const generateDates = () => {
 
 const generateOffers = (type) => {
   const IdsOfOffersByTypes = offersList
-    .filter((el) => el.type === type)
-    .map((el) => el.id);
+    .filter((offer) => offer.type === type)
+    .map((offer) => offer.id);
   const maxCount = IdsOfOffersByTypes.length;
   const count = getRandomInteger(1, maxCount);
   const result = [];

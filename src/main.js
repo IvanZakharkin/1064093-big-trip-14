@@ -4,14 +4,14 @@ import { getPointEditTemplate } from './view/point-edit';
 import { getPointTemplate } from './view/point';
 import { getSortingTemplate } from './view/sorting';
 import { getTripInfoTemplate } from './view/trip-info';
+import { sortPointsByDate } from './utils';
 import generatePoints from './mock/points';
 
+const POINT_COUNT = 20;
+
 const pointsContainer = document.querySelector('.trip-events__list');
-const points = generatePoints(20);
-//mock data already is sorted, but data from server may not be
-const sortedPointsByDate = points.sort(
-  (a, b) => a.dateFrom.unix() - b.dateFrom.unix(),
-);
+const points = generatePoints(POINT_COUNT);
+const sortedPointsByDate = sortPointsByDate(points);
 const editPoint = sortedPointsByDate.shift();
 
 const render = (container, tempalte, position) => {
