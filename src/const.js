@@ -73,3 +73,10 @@ export const offersList = [
     type: 'restaurant',
   },
 ];
+
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+  BEFOREBEGIN: 'beforebegin',
+  AFTEREND: 'afterend',
+};

@@ -1,9 +1,16 @@
-import { getHumanizedDuration, getOffersPoint } from '../utils';
-import { offersList } from '../const';
+import { getHumanizedDuration, getOffersPoint, createElement } from '../utils';
 
-const getPointTemplate = (point) => {
-  const offers = getOffersPoint(point, offersList);
+const getTemplateOffers = (offers) => {
+  return `<h4 class="visually-hidden">Offers:</h4>
+    <ul class="event__selected-offers">
+      ${offers.map((offer) => `<li class="event__offer">
+        <span class="event__offer-title">${offer.name}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span></li>`).join('')}
+    </ul>`;
+};
 
+const getTemplate = (point, offers) => {
   return `<li class="trip-events__item">
     <div class="event">
       <time class="event__date" datetime="2019-03-18">${point.dateFrom.format('MMM DD')}</time>
@@ -17,18 +24,12 @@ const getPointTemplate = (point) => {
               &mdash;
               <time class="event__end-time" datetime="2019-03-18T11:00">${point.dateTo.format('HH:mm')}</time>
           </p>
-          <p class="event__duration">${getHumanizedDuration(point.dateTo, point.dateFrom)}</p>
+          <p class="event__duration">${getHumanizedDuration(point.dateTo,point.dateFrom)}</p>
       </div>
       <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${point.price}</span>
       </p>
-      <h4 class="visually-hidden">Offers:</h4>
-      <ul class="event__selected-offers">
-        ${offers.map((offer) => `<li class="event__offer">
-          <span class="event__offer-title">${offer.name}</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">${offer.price}</span></li>`).join('')}
-      </ul>
+      ${getTemplateOffers(offers)}
       <button class="event__favorite-btn ${point.isFavorites ? 'event__favorite-btn--active' : ''}" type="button">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -42,4 +43,27 @@ const getPointTemplate = (point) => {
   </li>`;
 };
 
-export { getPointTemplate };
+export default class Point {
+  constructor(point, offersList = []) {
+    this._point = point;
+    this._offersList = offersList;
+
+    this._element = createElement(this.getTemplate());
+  }
+
+  _getOffers() {
+    return getOffersPoint(this._point, this._offersList);
+  }
+
+  getTemplate() {
+    return getTemplate(this._point, this._getOffers());
+  }
+
+  getElement() {
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

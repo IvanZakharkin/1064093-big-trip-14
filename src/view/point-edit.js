@@ -1,5 +1,6 @@
-import { pointTypes, offersList } from '../const';
-import cities from '../mock/cities';
+import { pointTypes } from '../const';
+import { createElement } from '../utils';
+
 
 const getTempalteDestination = (description, photos) => {
   if (!description && !photos.length) {
@@ -36,7 +37,7 @@ const getTempalteOffers = (pointOffers, offersList) => {
     </section>`;
 };
 
-const getPointEditTemplate = (point = {}) => {
+const getTemplate = (point = {}, offersList, cities) => {
   const {
     name = '',
     description = '',
@@ -106,4 +107,25 @@ const getPointEditTemplate = (point = {}) => {
   </li>`;
 };
 
-export { getPointEditTemplate };
+export default class PointEdit {
+  constructor(point  = {}, offersList = [], cities = []) {
+    this._element = null;
+    this._point = point;
+    this._offersList = offersList;
+    this._cities = cities;
+
+    this._element = createElement(this.getTemplate());
+  }
+
+  getTemplate() {
+    return getTemplate(this._point, this._offersList, this._cities);
+  }
+
+  getElement() {
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

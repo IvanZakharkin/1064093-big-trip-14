@@ -79,7 +79,7 @@ const generatePoint = () => {
     offers: generateOffers(type),
   };
 };
-const generatePoints = (count) => {
+const generatePoints = (count = 0) => {
   return Array(count).fill().map(generatePoint);
 };
 

@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import { RenderPosition } from './const';
 
 dayjs.extend(duration);
 
@@ -35,7 +36,32 @@ export const getOffersPoint = (point, offersList) => {
 };
 
 export const sortPointsByDate = (points) => {
-  return points.sort(
-    (a, b) => a.dateFrom.unix() - b.dateFrom.unix(),
-  );
+  return points.sort((a, b) => a.dateFrom.unix() - b.dateFrom.unix());
+};
+
+export const createElement = (template) => {
+  const element = document.createElement('div');
+  element.innerHTML = template;
+
+  return element.firstChild;
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+    case RenderPosition.BEFOREBEGIN:
+      container.before(element);
+      break;
+    case RenderPosition.AFTEREND:
+      container.after(element);
+      break;
+    case RenderPosition.REPLACEWITH:
+      container.replaceWith(element);
+      break;
+  }
 };
