@@ -1,59 +1,106 @@
-import { getFilterTemplate } from './view/filter';
-import { getMenuTemplate } from './view/menu';
-import { getPointEditTemplate } from './view/point-edit';
-import { getPointTemplate } from './view/point';
-import { getSortingTemplate } from './view/sorting';
-import { getTripInfoTemplate } from './view/trip-info';
-import { sortPointsByDate } from './utils';
+import FilterView from './view/filter';
+import MenuView from './view/menu';
+import PointEditView from './view/point-edit';
+import PointView from './view/point';
+import SortingView from './view/sorting';
+import TripInfoView from './view/trip-info';
+import MessageView from './view/message';
 import generatePoints from './mock/points';
+import cities from './mock/cities';
+import { offersList } from './mock/const';
+import { RenderPosition } from './consts/render';
+import {  render } from './utils/render';
+import { sortPointsByDate } from './utils/points';
 
 const POINT_COUNT = 20;
+const EMPTY_POINTS_MESSAGE = 'Click New Event to create your first point';
 
 const pointsContainer = document.querySelector('.trip-events__list');
 const points = generatePoints(POINT_COUNT);
 const sortedPointsByDate = sortPointsByDate(points);
-const editPoint = sortedPointsByDate.shift();
-
-const render = (container, tempalte, position) => {
-  container.insertAdjacentHTML(position, tempalte);
-};
 
 const renderFilter = () => {
   render(
     document.querySelector('.trip-controls__filters'),
-    getFilterTemplate(),
-    'beforeend',
+    new FilterView().getElement(),
+    RenderPosition.BEFOREEND,
   );
 };
 const renderMenu = () => {
   render(
     document.querySelector('.trip-controls__navigation'),
-    getMenuTemplate(),
-    'beforeend',
+    new MenuView().getElement(),
+    RenderPosition.BEFOREEND,
   );
-};
-const renderPoints = (sortedPointsByDate) => {
-  sortedPointsByDate.forEach((point) =>
-    render(pointsContainer, getPointTemplate(point), 'beforeend'),
-  );
-};
-const renderPointEdit = (editPoint) => {
-  render(pointsContainer, getPointEditTemplate(editPoint), 'afterbegin');
 };
 const renderSorting = () => {
-  render(pointsContainer, getSortingTemplate(), 'beforebegin');
+  render(pointsContainer, new SortingView().getElement(), 'beforebegin');
 };
-const renderTripInfo = (sortedPointsByDate) => {
+const renderTripInfo = (points) => {
   render(
     document.querySelector('.trip-main'),
-    getTripInfoTemplate(sortedPointsByDate),
-    'afterbegin',
+    new TripInfoView(points).getElement(),
+    RenderPosition.AFTERBEGIN,
   );
+};
+const renderPoints = (points = []) => {
+  if (!points.length) {
+    render(
+      document.querySelector('.trip-events'),
+      new MessageView(EMPTY_POINTS_MESSAGE).getElement(),
+      RenderPosition.AFTERBEGIN,
+    );
+    return;
+  }
+
+  points.forEach((point) => {
+    const pointElement = new PointView(point, offersList).getElement();
+    const pointEditElement = new PointEditView(
+      point,
+      offersList,
+      cities,
+    ).getElement();
+
+    const replacePointToForm = () => {
+      render(pointElement, pointEditElement, RenderPosition.REPLACEWITH);
+    };
+    const replaceFormToPoint = () => {
+      render(pointEditElement, pointElement, RenderPosition.REPLACEWITH);
+    };
+    const onEscKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        e.preventDefault();
+        replaceFormToPoint();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
+    render(pointsContainer, pointElement, 'beforeend');
+
+    pointElement
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', () => {
+        replacePointToForm();
+        document.addEventListener('keydown', onEscKeyDown);
+      });
+    pointEditElement
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', () => {
+        replaceFormToPoint();
+        document.removeEventListener('keydown', onEscKeyDown);
+      });
+    pointEditElement
+      .querySelector('.event--edit')
+      .addEventListener('submit', (e) => {
+        e.preventDefault();
+        replaceFormToPoint();
+        document.removeEventListener('keydown', onEscKeyDown);
+      });
+  });
+  renderSorting();
+  renderTripInfo(sortedPointsByDate);
 };
 
 renderFilter();
 renderMenu();
 renderPoints(sortedPointsByDate);
-renderPointEdit(editPoint);
-renderSorting();
-renderTripInfo(sortedPointsByDate);
