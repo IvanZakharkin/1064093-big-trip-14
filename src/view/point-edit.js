@@ -1,5 +1,5 @@
-import { pointTypes } from '../const';
-import { createElement } from '../utils';
+import { pointTypes } from '../mock/const';
+import { createElement } from '../utils/render';
 
 
 const getTempalteDestination = (description, photos) => {
@@ -109,7 +109,6 @@ const getTemplate = (point = {}, offersList, cities) => {
 
 export default class PointEdit {
   constructor(point  = {}, offersList = [], cities = []) {
-    this._element = null;
     this._point = point;
     this._offersList = offersList;
     this._cities = cities;

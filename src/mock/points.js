@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import cities from './cities';
-import { pointTypes, offersList } from '../const';
-import { getRandomInteger } from '../utils';
+import { pointTypes, offersList } from './const';
+import { getRandomInteger } from '../utils/common';
 
 const generateDestination = () => {
   const randomIndex = getRandomInteger(0, cities.length - 1);

@@ -1,5 +1,6 @@
-import { offersList } from '../const';
-import { createElement, getOffersPoint } from '../utils';
+import { offersList } from '../mock/const';
+import { createElement } from '../utils/render';
+import { getOffersPoint } from '../utils/points';
 
 const getTemplate = (data) => {
   const { cities, price, dates } = data;

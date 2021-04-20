@@ -1,4 +1,6 @@
-import { getHumanizedDuration, getOffersPoint, createElement } from '../utils';
+import { createElement } from '../utils/render';
+import { getHumanizedDuration } from '../utils/common';
+import { getOffersPoint } from '../utils/points';
 
 const getTemplateOffers = (offers) => {
   return `<h4 class="visually-hidden">Offers:</h4>

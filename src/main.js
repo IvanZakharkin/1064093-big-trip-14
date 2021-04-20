@@ -7,9 +7,10 @@ import TripInfoView from './view/trip-info';
 import MessageView from './view/message';
 import generatePoints from './mock/points';
 import cities from './mock/cities';
-import { offersList } from './const';
-import { RenderPosition } from './const';
-import { sortPointsByDate, render } from './utils';
+import { offersList } from './mock/const';
+import { RenderPosition } from './consts/render';
+import {  render } from './utils/render';
+import { sortPointsByDate } from './utils/points';
 
 const POINT_COUNT = 20;
 const EMPTY_POINTS_MESSAGE = 'Click New Event to create your first point';
