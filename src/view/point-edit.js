@@ -1,3 +1,4 @@
+import Abstract from './abstract';
 import { pointTypes } from '../mock/const';
 import { createElement } from '../utils/render';
 
@@ -107,24 +108,38 @@ const getTemplate = (point = {}, offersList, cities) => {
   </li>`;
 };
 
-export default class PointEdit {
+export default class PointEdit extends Abstract{
   constructor(point  = {}, offersList = [], cities = []) {
+    super();
     this._point = point;
     this._offersList = offersList;
     this._cities = cities;
 
     this._element = createElement(this.getTemplate());
+    this._closeEditClickHandler = this._closeEditClickHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
     return getTemplate(this._point, this._offersList, this._cities);
   }
 
-  getElement() {
-    return this._element;
+  _closeEditClickHandler() {
+    this._callbacks.closeEditClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setCloseEditClickHandler(callback) {
+    this._callbacks.closeEditClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._closeEditClickHandler);
+  }
+
+  _formSubmitHandler(e) {
+    e.preventDefault();
+    this._callbacks.formSubmit();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callbacks.formSubmit = callback;
+    this.getElement().querySelector('.event--edit').addEventListener('submit', this._formSubmitHandler);
   }
 }

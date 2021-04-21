@@ -1,3 +1,4 @@
+import Abstract from './abstract';
 import { createElement } from '../utils/render';
 
 const getTemplate = () => {
@@ -18,21 +19,15 @@ const getTemplate = () => {
   </form>`;
 };
 
-export default class Filter {
+export default class Filter extends Abstract {
   constructor() {
+    super();
+
     this._element = createElement(this.getTemplate());
   }
 
   getTemplate() {
     return getTemplate();
-  }
-
-  getElement() {
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

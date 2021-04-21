@@ -9,7 +9,7 @@ import generatePoints from './mock/points';
 import cities from './mock/cities';
 import { offersList } from './mock/const';
 import { RenderPosition } from './consts/render';
-import {  render } from './utils/render';
+import { render } from './utils/render';
 import { sortPointsByDate } from './utils/points';
 
 const POINT_COUNT = 20;
@@ -54,18 +54,14 @@ const renderPoints = (points = []) => {
   }
 
   points.forEach((point) => {
-    const pointElement = new PointView(point, offersList).getElement();
-    const pointEditElement = new PointEditView(
-      point,
-      offersList,
-      cities,
-    ).getElement();
+    const pointComponent = new PointView(point, offersList);
+    const pointEditComponent = new PointEditView(point, offersList, cities);
 
     const replacePointToForm = () => {
-      render(pointElement, pointEditElement, RenderPosition.REPLACEWITH);
+      render(pointComponent, pointEditComponent, RenderPosition.REPLACEWITH);
     };
     const replaceFormToPoint = () => {
-      render(pointEditElement, pointElement, RenderPosition.REPLACEWITH);
+      render(pointEditComponent, pointComponent, RenderPosition.REPLACEWITH);
     };
     const onEscKeyDown = (e) => {
       if (e.key === 'Escape' || e.key === 'Esc') {
@@ -75,27 +71,22 @@ const renderPoints = (points = []) => {
       }
     };
 
-    render(pointsContainer, pointElement, 'beforeend');
+    pointComponent.setEditClickHandler(() => {
+      replacePointToForm();
+      document.addEventListener('keydown', onEscKeyDown);
+    });
 
-    pointElement
-      .querySelector('.event__rollup-btn')
-      .addEventListener('click', () => {
-        replacePointToForm();
-        document.addEventListener('keydown', onEscKeyDown);
-      });
-    pointEditElement
-      .querySelector('.event__rollup-btn')
-      .addEventListener('click', () => {
-        replaceFormToPoint();
-        document.removeEventListener('keydown', onEscKeyDown);
-      });
-    pointEditElement
-      .querySelector('.event--edit')
-      .addEventListener('submit', (e) => {
-        e.preventDefault();
-        replaceFormToPoint();
-        document.removeEventListener('keydown', onEscKeyDown);
-      });
+    pointEditComponent.setCloseEditClickHandler(() => {
+      replaceFormToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
+
+    pointEditComponent.setFormSubmitHandler(() => {
+      replaceFormToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
+
+    render(pointsContainer, pointComponent, 'beforeend');
   });
   renderSorting();
   renderTripInfo(sortedPointsByDate);

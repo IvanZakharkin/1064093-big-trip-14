@@ -1,3 +1,4 @@
+import Abstract from './abstract';
 import { createElement } from '../utils/render';
 
 const getTemplate = (message) => {
@@ -5,8 +6,9 @@ const getTemplate = (message) => {
 };
 
 
-export default class Message {
+export default class Message extends Abstract {
   constructor(message) {
+    super();
     this._message = message;
 
     this._element = createElement(this.getTemplate());
@@ -14,13 +16,5 @@ export default class Message {
 
   getTemplate() {
     return getTemplate(this._message);
-  }
-
-  getElement() {
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

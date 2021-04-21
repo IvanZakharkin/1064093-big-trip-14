@@ -1,3 +1,4 @@
+import Abstract from './abstract';
 import { createElement } from '../utils/render';
 import { getHumanizedDuration } from '../utils/common';
 import { getOffersPoint } from '../utils/points';
@@ -45,12 +46,14 @@ const getTemplate = (point, offers) => {
   </li>`;
 };
 
-export default class Point {
+export default class Point extends Abstract {
   constructor(point, offersList = []) {
+    super();
     this._point = point;
     this._offersList = offersList;
 
     this._element = createElement(this.getTemplate());
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   _getOffers() {
@@ -61,11 +64,12 @@ export default class Point {
     return getTemplate(this._point, this._getOffers());
   }
 
-  getElement() {
-    return this._element;
+  _editClickHandler() {
+    this._callbacks.editClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callbacks.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }

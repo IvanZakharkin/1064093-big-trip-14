@@ -1,3 +1,4 @@
+import Abstract from './abstract';
 import { createElement } from '../utils/render';
 
 const getTemplate = () => {
@@ -25,20 +26,14 @@ const getTemplate = () => {
   </form>`;
 };
 
-export default class Sorting {
+export default class Sorting extends Abstract{
   constructor() {
+    super();
+
     this._element = createElement(this.getTemplate());
   }
 
   getTemplate() {
     return getTemplate();
-  }
-
-  getElement() {
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
