@@ -1,3 +1,4 @@
+import Abstract from '../view/abstract.js';
 import { RenderPosition } from '../consts/render';
 
 export const createElement = (template) => {
@@ -8,6 +9,18 @@ export const createElement = (template) => {
 };
 
 export const render = (container, element, place) => {
+  if (container instanceof Abstract) {
+    container = container.getElement();
+  }
+
+  if (element instanceof Abstract) {
+    element = element.getElement();
+  }
+
+  if (!(container instanceof Element) || !(element instanceof Element)) {
+    throw new Error('Arguments isn\'t DOM-element\'s or components without elements');
+  }
+
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
@@ -24,5 +37,7 @@ export const render = (container, element, place) => {
     case RenderPosition.REPLACEWITH:
       container.replaceWith(element);
       break;
+    default:
+      throw new Error('Unknown render place');
   }
 };

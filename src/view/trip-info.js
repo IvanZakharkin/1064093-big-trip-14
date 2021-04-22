@@ -1,3 +1,4 @@
+import Abstract from './abstract';
 import { offersList } from '../mock/const';
 import { createElement } from '../utils/render';
 import { getOffersPoint } from '../utils/points';
@@ -16,10 +17,12 @@ const getTemplate = (data) => {
   </section>`;
 };
 
-export default class TripInfo {
+export default class TripInfo extends Abstract{
   constructor(points) {
-    this._element = null;
+    super();
     this._points = points;
+
+    this._element = createElement(this.getTemplate());
   }
 
   _calcCommonPrice() {
@@ -75,17 +78,5 @@ export default class TripInfo {
     };
 
     return getTemplate(data);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
