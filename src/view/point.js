@@ -54,6 +54,7 @@ export default class Point extends Abstract {
 
     this._element = createElement(this.getTemplate());
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoritesClickHandler = this._favoritesClickHandler.bind(this);
   }
 
   _getOffers() {
@@ -68,8 +69,17 @@ export default class Point extends Abstract {
     this._callbacks.editClick();
   }
 
+  _favoritesClickHandler() {
+    this._callbacks.favoritesClick();
+  }
+
   setEditClickHandler(callback) {
     this._callbacks.editClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
+  setFavoritesClickHandler(callback) {
+    this._callbacks.favoritesClick = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoritesClickHandler);
   }
 }

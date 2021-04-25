@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 import cities from './cities';
 import { pointTypes, offersList } from './const';
@@ -68,6 +69,7 @@ const generatePoint = () => {
   const type = generateType();
   const { name, description, photos } = generateDestination();
   return {
+    id: nanoid(),
     name,
     description,
     photos,

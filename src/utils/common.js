@@ -8,8 +8,12 @@ export const getRandomInteger = (min, max) => {
   return Math.floor(rand);
 };
 
+export const getDuration = (dateTo, dateFrom) => {
+  return dayjs.duration(dateTo.diff(dateFrom));
+};
+
 export const getHumanizedDuration = (dateTo, dateFrom) => {
-  const duration = dayjs.duration(dateTo.diff(dateFrom));
+  const duration = getDuration(dateTo, dateFrom);
 
   return ['d', 'h', 'm'].reduce((acc, el) => {
     const unitTime = duration.get(el);
@@ -28,4 +32,14 @@ export const getHumanizedDuration = (dateTo, dateFrom) => {
 
     return acc;
   }, '');
+};
+
+export const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [...items.slice(0, index), update, ...items.slice(index + 1)];
 };

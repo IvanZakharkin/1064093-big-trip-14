@@ -18,7 +18,9 @@ export const render = (container, element, place) => {
   }
 
   if (!(container instanceof Element) || !(element instanceof Element)) {
-    throw new Error('Arguments isn\'t DOM-element\'s or components without elements');
+    throw new Error(
+      'Arguments isn\'t DOM-element\'s or components without elements',
+    );
   }
 
   switch (place) {
@@ -40,4 +42,13 @@ export const render = (container, element, place) => {
     default:
       throw new Error('Unknown render place');
   }
+};
+
+export const removeComponent = (component) => {
+  if (!(component instanceof Abstract)) {
+    throw new Error('Can remove only components');
+  }
+
+  component.getElement().remove();
+  component.removeElement();
 };
